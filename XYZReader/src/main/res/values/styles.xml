@@ -17,11 +17,14 @@
 
 <resources>
 
-    <style name="Theme.Bacon" parent="@style/Theme.AppCompat.Light.NoActionBar">
-
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/accentColor</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="Theme.Bacon.Detail">
+    <style name="AppTheme.Detail">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
