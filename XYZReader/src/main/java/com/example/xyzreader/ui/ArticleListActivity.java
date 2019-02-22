@@ -54,23 +54,46 @@ public class ArticleListActivity extends AppCompatActivity implements
     // Most time functions can only handle 1902 - 2037
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
 
+    private Adapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setup();
 
-        setSupportActionBar(mToolbar);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         getLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
             refresh();
         }
+    }
+
+    private void setup() {
+        mSwipeRefreshLayout =  findViewById(R.id.swipe_refresh_layout);
+        mRecyclerView =  findViewById(R.id.recycler_view);
+        mToolbar =  findViewById(R.id.toolbar);
+
+        setSupportActionBar(mToolbar);
+
+
+        mAdapter = new Adapter(null);
+        mAdapter.setHasStableIds(true);
+        mRecyclerView.setAdapter(mAdapter);
+
+        int columnCount = getResources().getInteger(R.integer.list_column_count);
+        StaggeredGridLayoutManager sglm =
+                new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(sglm);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+
     }
 
     private void refresh() {
@@ -113,13 +136,8 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        Adapter adapter = new Adapter(cursor);
-        adapter.setHasStableIds(true);
-        mRecyclerView.setAdapter(adapter);
-        int columnCount = getResources().getInteger(R.integer.list_column_count);
-        StaggeredGridLayoutManager sglm =
-                new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(sglm);
+        mAdapter.setCursor(cursor);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -129,6 +147,10 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     private class Adapter extends RecyclerView.Adapter<ViewHolder> {
         private Cursor mCursor;
+
+        public void setCursor(Cursor mCursor) {
+            this.mCursor = mCursor;
+        }
 
         public Adapter(Cursor cursor) {
             mCursor = cursor;
@@ -193,6 +215,8 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         @Override
         public int getItemCount() {
+            if(mCursor == null)
+                return 0;
             return mCursor.getCount();
         }
     }
