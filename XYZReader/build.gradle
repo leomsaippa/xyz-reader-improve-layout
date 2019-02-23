@@ -36,6 +36,9 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.picasso:picasso:$picassoVersion"
 
+    implementation "com.android.support:design:$androidSupportVersion"
+    implementation 'com.hendraanggrian:collapsingtoolbarlayout-subtitle:27.1.0'
+
     compile files('libs/volley.jar')
 
 }
