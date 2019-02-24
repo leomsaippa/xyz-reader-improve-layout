@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:elevation="4dp"
+        android:elevation="@dimen/elevation_appbar"
         android:fitsSystemWindows="true"
         >
 
@@ -52,9 +52,9 @@
             android:id="@+id/cardView_article"
             style="@style/ArticleDetailCardViewTheme"
             android:layout_gravity="center_horizontal"
-            app:cardElevation="4dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp">
+            app:cardElevation="@dimen/elevation_cardView"
+            android:layout_marginStart="@dimen/margin_cardView"
+            android:layout_marginEnd="@dimen/margin_cardView">
             <TextView
                 android:id="@+id/article_body"
                 style="@style/ArticleDetailBodyTextTheme"
