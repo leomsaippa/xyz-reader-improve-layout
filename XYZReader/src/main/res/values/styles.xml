@@ -17,12 +17,53 @@
 
 <resources>
 
-    <style name="Theme.Bacon" parent="@style/Theme.AppCompat.Light.NoActionBar">
+
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/accentColor</item>
+        <item name="android:windowContentTransitions">true</item>
 
     </style>
 
-    <style name="Theme.Bacon.Detail">
-        <item name="android:statusBarColor">@android:color/transparent</item>
+    <style name="AppTheme.Detail">
+    </style>
+    <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
+
+    <style name="CollapsingToolbarTheme" parent="Widget.Design.CollapsingToolbar.Subtitle">
+        <item name="contentScrim">@color/photo_placeholder</item>
+        <item name="expandedTitleTextAppearance">@android:color/transparent</item>
+        <item name="layout_scrollFlags">scroll|exitUntilCollapsed</item>
+        <item name="statusBarScrim">@android:color/transparent</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+    <style name="ArticleDetailCardViewTheme" parent="CardView.Light">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:elevation">8dp</item>
+        <item name="cardCornerRadius">1dp</item>
+    </style>
+
+    <style name="ArticleDetailBodyTextTheme" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="FloatingActionButtonTheme" parent="AppTheme">
+        <item name="android:layout_width">@dimen/fab_size</item>
+        <item name="android:layout_height">@dimen/fab_size</item>
+        <item name="android:layout_marginBottom">@dimen/fab_margin</item>
+        <item name="android:layout_marginEnd">@dimen/fab_margin</item>
+        <item name="borderWidth">0dp</item>
+        <item name="elevation">@dimen/fab_elevation</item>
+        <item name="android:stateListAnimator">@animator/fab_state_list_anim</item>
     </style>
 
 </resources>
