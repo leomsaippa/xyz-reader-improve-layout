@@ -24,7 +24,7 @@ import com.example.xyzreader.data.ItemsContract;
  * An activity representing a single Article detail screen, letting you swipe between articles.
  */
 public class ArticleDetailActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Cursor> {
+        implements LoaderManager.LoaderCallbacks<Cursor>, ArticleDetailFragment.ActivityListener {
 
     private Cursor mCursor;
     private long mStartId;
@@ -107,6 +107,11 @@ public class ArticleDetailActivity extends AppCompatActivity
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mCursor = null;
         mPagerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBackClick() {
+        finish();
     }
 
 

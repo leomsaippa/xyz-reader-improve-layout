@@ -5,7 +5,6 @@ import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 
 import java.text.ParseException;
@@ -13,11 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.SubtitleCollapsingToolbarLayout;
 import android.support.v4.app.ShareCompat;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -31,7 +28,6 @@ import android.widget.TextView;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 /**
  * A fragment representing a single Article detail screen. This fragment is
@@ -57,8 +53,8 @@ public class ArticleDetailFragment extends Fragment implements
     // Most time functions can only handle 1902 - 2037
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
 
-    SubtitleCollapsingToolbarLayout mCollapsionToolbarLayout;
-
+    SubtitleCollapsingToolbarLayout mCollapsingToolbar;
+    private ActivityListener activityListener;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -88,6 +84,10 @@ public class ArticleDetailFragment extends Fragment implements
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        if(getActivity() != null ){
+            activityListener = (ActivityListener) getActivity();
+        }
+
         // In support library r8, calling initLoader for a fragment in a FragmentPagerAdapter in
         // the fragment's onCreate may cause the same LoaderManager to be dealt to multiple
         // fragments because their mIndex is -1 (haven't been added to the activity yet). Thus,
@@ -97,10 +97,10 @@ public class ArticleDetailFragment extends Fragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
 
-        mPhotoView = (ImageView) mRootView.findViewById(R.id.photo);
+        mPhotoView =  mRootView.findViewById(R.id.photo);
 
         bindViews();
         return mRootView;
@@ -124,17 +124,17 @@ public class ArticleDetailFragment extends Fragment implements
         }
 
 
-        TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
+        TextView bodyView =  mRootView.findViewById(R.id.article_body);
 
         mToolbar = mRootView.findViewById(R.id.toolbar);
-        mCollapsionToolbarLayout = mRootView.findViewById(R.id.collapsingToolbar);
+        mCollapsingToolbar = mRootView.findViewById(R.id.collapsingToolbar);
 
         bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // parentActivityListener.onHomeClicked();
+                activityListener.onBackClick();
             }
         });
 
@@ -144,10 +144,11 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.setVisibility(View.VISIBLE);
             mRootView.animate().alpha(1);
 
-            mCollapsionToolbarLayout.setTitle(mCursor.getString(ArticleLoader.Query.TITLE));
+            mCollapsingToolbar.setTitle(mCursor.getString(ArticleLoader.Query.TITLE));
+
             Date publishedDate = parsePublishedDate();
             if (!publishedDate.before(START_OF_EPOCH.getTime())) {
-                mCollapsionToolbarLayout.setSubtitle(Html.fromHtml(
+                mCollapsingToolbar.setSubtitle(Html.fromHtml(
                         DateUtils.getRelativeTimeSpanString(
                                 publishedDate.getTime(),
                                 System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
@@ -158,12 +159,13 @@ public class ArticleDetailFragment extends Fragment implements
 
             } else {
                 // If date is before 1902, just show the string
-                mCollapsionToolbarLayout.setSubtitle(Html.fromHtml(
+                mCollapsingToolbar.setSubtitle(Html.fromHtml(
                         outputFormat.format(publishedDate) + " by <font color='#ffffff'>"
-                        + mCursor.getString(ArticleLoader.Query.AUTHOR)
+                                + mCursor.getString(ArticleLoader.Query.AUTHOR)
                                 + "</font>"));
 
             }
+
             final String bodyText = mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />");
             bodyView.setText(Html.fromHtml(bodyText));
 
@@ -182,10 +184,11 @@ public class ArticleDetailFragment extends Fragment implements
 
         } else {
             mRootView.setVisibility(View.GONE);
-            mCollapsionToolbarLayout.setTitle("N/A");
-            mCollapsionToolbarLayout.setSubtitle("N/A");
+            mCollapsingToolbar.setTitle("N/A");
+            mCollapsingToolbar.setSubtitle("N/A");
             bodyView.setText("N/A");
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -216,6 +219,10 @@ public class ArticleDetailFragment extends Fragment implements
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mCursor = null;
         bindViews();
+    }
+
+    interface ActivityListener {
+        void onBackClick();
     }
 
 }
