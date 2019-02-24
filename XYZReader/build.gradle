@@ -21,12 +21,14 @@ android {
 
     defaultConfig {
         minSdkVersion 21
+        //noinspection OldTargetApi
         targetSdkVersion 27
     }
 }
 
 dependencies {
     implementation "com.android.support:support-v4:$androidSupportVersion"
+    implementation "com.android.support:exifinterface:$androidSupportVersion"
     implementation "com.android.support:support-v13:$androidSupportVersion"
     implementation "com.android.support:appcompat-v7:$androidSupportVersion"
     implementation "com.android.support:palette-v7:$androidSupportVersion"
@@ -37,8 +39,8 @@ dependencies {
     implementation "com.squareup.picasso:picasso:$picassoVersion"
 
     implementation "com.android.support:design:$androidSupportVersion"
-    implementation 'com.hendraanggrian:collapsingtoolbarlayout-subtitle:27.1.0'
+    implementation "com.hendraanggrian:collapsingtoolbarlayout-subtitle:$collapsingToolbarVersion"
 
-    compile files('libs/volley.jar')
+    implementation files('libs/volley.jar')
 
 }
